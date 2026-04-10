@@ -43,13 +43,25 @@ void walk_speed::Apply()
 		return;
 	}
 
-	SDK::AActor* pViewTarget = pPlayerController->GetViewTarget();
-	if (pViewTarget == nullptr)
+	SDK::APawn* pPlayerPawn = pPlayerController->AcknowledgedPawn;
+	if (pPlayerPawn == nullptr)
 	{
 		return;
 	}
 
-	SDK::ACharacter* pCharacter = static_cast<SDK::ACharacter*>(pViewTarget);
+	SDK::UWorldPartitionSubsystem* pPartitionSubsystem = static_cast<SDK::UWorldPartitionSubsystem*>(
+		SDK::USubsystemBlueprintLibrary::GetWorldSubsystem(
+			pWorld,
+			SDK::TSubclassOf<SDK::UWorldSubsystem>(SDK::UWorldPartitionSubsystem::StaticClass())));
+	if (pPartitionSubsystem != nullptr)
+	{
+		if (!pPartitionSubsystem->IsAllStreamingCompleted())
+		{
+			return;
+		}
+	}
+
+	SDK::ACharacter* pCharacter = static_cast<SDK::ACharacter*>(pPlayerPawn);
 	if (pCharacter == nullptr)
 	{
 		return;
@@ -68,7 +80,7 @@ void walk_speed::Apply()
 	pMovement->MaxWalkSpeed = fRunSpeed;
 	pMovement->MaxWalkSpeedCrouched = fCrouchWalkSpeed;
 
-	SDK::APlayerCharacter* pPlayerCharacter = static_cast<SDK::APlayerCharacter*>(pViewTarget);
+	SDK::APlayerCharacter* pPlayerCharacter = static_cast<SDK::APlayerCharacter*>(pPlayerPawn);
 	pPlayerCharacter->RunSpeed = fWalkSpeed;
 	pPlayerCharacter->MaxRunSpeedPercent = 1.0f;
 	pPlayerCharacter->CurrentRunSpeedPercent = 1.0f;
