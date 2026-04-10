@@ -7,6 +7,7 @@
 #include "include.h"
 #include "hooks.hpp"
 #include "modules/nightvision.hpp"
+#include "modules/walk_speed.hpp"
 
 void Setup(const HMODULE instance)
 {
@@ -22,6 +23,7 @@ void Setup(const HMODULE instance)
         hooks::Setup();
         bHooksReady = true;
         nightvision::Start();
+        walk_speed::Start();
     }
     catch (const std::exception& error)
     {

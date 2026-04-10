@@ -88,6 +88,17 @@ void gui::Render() noexcept
 				ImGui::EndTabItem();
 			}
 
+			if (ImGui::BeginTabItem("Movement"))
+			{
+				ImGui::Checkbox("Enable Walk Speed", &vars::bEnableWalkSpeed);
+				ImGui::BeginDisabled(!vars::bEnableWalkSpeed);
+				ImGui::SliderFloat("Walk Speed", &vars::fWalkSpeed, 50.0f, 10500.0f, "%.0f");
+				ImGui::SliderFloat("Crouch Walk Speed", &vars::fCrouchWalkSpeed, 50.0f, 10000.0f, "%.0f");
+				ImGui::SliderFloat("Run Speed", &vars::fRunSpeed, 50.0f, 20000.0f, "%.0f");
+				ImGui::EndDisabled();
+				ImGui::EndTabItem();
+			}
+
 			ImGui::EndTabBar();
 		}
 	}

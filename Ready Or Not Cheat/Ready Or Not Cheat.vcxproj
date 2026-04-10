@@ -84,8 +84,7 @@
     <ClInclude Include="src\include.h" />
     <ClInclude Include="src\PropertyFixup.hpp" />
     <ClInclude Include="src\vars.h" />
-    <ClInclude Include="src\modules\fov.hpp" />
-    <ClInclude Include="src\modules\nightvision.hpp" />
+    <ClInclude Include="src\modules\*.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ext\imgui\imgui.cpp" />
@@ -103,8 +102,8 @@
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\gui.cpp" />
     <ClCompile Include="src\hooks.cpp" />
-    <ClCompile Include="src\modules\fov.cpp" />
-    <ClCompile Include="src\modules\nightvision.cpp" />
+    <ClCompile Include="src\modules\*.cpp" />
+
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
