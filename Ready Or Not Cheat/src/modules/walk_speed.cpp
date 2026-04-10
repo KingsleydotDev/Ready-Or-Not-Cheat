@@ -22,7 +22,7 @@ namespace
 			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		}
 	}
-}
+} 
 
 void walk_speed::Apply()
 {
