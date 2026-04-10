@@ -70,7 +70,7 @@ void gui::Render() noexcept
 	//title
 	std::string dynamicTitle = MenuTitle + "###MenuID";
 
-	// window size 
+	// window size
 	ImGui::SetNextWindowSize(ImVec2(WIDTH, HEIGHT), ImGuiCond_FirstUseEver);
 
 	//menu
@@ -110,7 +110,7 @@ LRESULT CALLBACK WindowProcess(
 			longParam
 		);
 
-	if (GetAsyncKeyState(VK_INSERT) & 1) {
+	if (GetAsyncKeyState(VK_HOME) & 1) {
 		gui::open = !gui::open;
 	}
 	if (gui::open)
