@@ -1,5 +1,4 @@
 #include "hooks.hpp"
-#include "modules/fov.hpp"
 #include <atomic>
 #include <stdexcept>
 
@@ -161,8 +160,6 @@ long __stdcall hooks::Present(IDXGISwapChain* swapChain, UINT syncInterval, UINT
 
 	gui::context->OMSetRenderTargets(1, &gui::renderTargetView, NULL);
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-	fov::Apply();
 
 	return PresentOriginal(swapChain, syncInterval, flags);
 }

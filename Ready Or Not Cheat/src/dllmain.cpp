@@ -6,6 +6,8 @@
 #include <random>
 #include "include.h"
 #include "hooks.hpp"
+#include "modules/fov.hpp"
+#include "modules/moduleruntime.hpp"
 #include "modules/nightvision.hpp"
 #include "modules/walk_speed.hpp"
 
@@ -22,8 +24,9 @@ void Setup(const HMODULE instance)
         gui::Setup();
         hooks::Setup();
         bHooksReady = true;
-        nightvision::Start();
+        fov::Start();
         walk_speed::Start();
+        nightvision::Start();
     }
     catch (const std::exception& error)
     {
@@ -42,6 +45,10 @@ void Setup(const HMODULE instance)
     }
 
 UNLOAD:
+    moduleruntime::RequestStop();
+    fov::Stop();
+    walk_speed::Stop();
+    nightvision::Stop();
     if (bHooksReady)
         hooks::BeginUnloadWait();
     hooks::Destroy(bHooksReady, hooks::MinHookTornDownAfterPresent());

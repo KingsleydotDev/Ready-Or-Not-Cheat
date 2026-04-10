@@ -1,4 +1,5 @@
 #include "fov.hpp"
+#include "moduleruntime.hpp"
 #include "../vars.h"
 #include "../SDK/Basic.hpp"
 #include "../SDK/CoreUObject_classes.hpp"
@@ -6,6 +7,22 @@
 #include "../SDK/Engine_classes.hpp"
 #include "../SDK/Engine_structs.hpp"
 #include "../SDK/ReadyOrNot_classes.hpp"
+#include <chrono>
+#include <thread>
+
+namespace
+{
+	std::thread threadWorker;
+
+	void RunWorker()
+	{
+		while (moduleruntime::WorkersActive())
+		{
+			fov::Apply();
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		}
+	}
+}
 
 void fov::Apply()
 {
@@ -46,4 +63,21 @@ void fov::Apply()
 	pCameraManager->CameraCachePrivate.POV.DesiredFOV = fFov;
 	pCameraManager->LastFrameCameraCachePrivate.POV.FOV = fFov;
 	pCameraManager->LastFrameCameraCachePrivate.POV.DesiredFOV = fFov;
+}
+
+void fov::Start()
+{
+	if (threadWorker.joinable())
+	{
+		return;
+	}
+	threadWorker = std::thread(RunWorker);
+}
+
+void fov::Stop()
+{
+	if (threadWorker.joinable())
+	{
+		threadWorker.join();
+	}
 }

@@ -1,4 +1,5 @@
 #include "walk_speed.hpp"
+#include "moduleruntime.hpp"
 #include "../vars.h"
 #include "../SDK/Basic.hpp"
 #include "../SDK/CoreUObject_classes.hpp"
@@ -6,75 +7,87 @@
 #include "../SDK/Engine_classes.hpp"
 #include "../SDK/Engine_structs.hpp"
 #include "../SDK/ReadyOrNot_classes.hpp"
-#include <Windows.h>
-#include <thread>
 #include <chrono>
+#include <thread>
 
-void RunWalkSpeedWorker()
+namespace
 {
-    while (!(GetAsyncKeyState(VK_END) & 1))
-    {
-        if (!vars::bEnableWalkSpeed)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            continue;
-        }
+	std::thread threadWorker;
 
-        SDK::UWorld* pWorld = SDK::UWorld::GetWorld();
-        if (pWorld == nullptr)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            continue;
-        }
+	void RunWorker()
+	{
+		while (moduleruntime::WorkersActive())
+		{
+			walk_speed::Apply();
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		}
+	}
+}
 
-        SDK::APlayerController* pPlayerController = SDK::UGameplayStatics::GetPlayerController(pWorld, 0);
-        if (pPlayerController == nullptr)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            continue;
-        }
+void walk_speed::Apply()
+{
+	if (!vars::bEnableWalkSpeed)
+	{
+		return;
+	}
 
-        SDK::AActor* pViewTarget = pPlayerController->GetViewTarget();
-        if (pViewTarget == nullptr)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            continue;
-        }
+	SDK::UWorld* pWorld = SDK::UWorld::GetWorld();
+	if (pWorld == nullptr)
+	{
+		return;
+	}
 
-        SDK::ACharacter* pCharacter = static_cast<SDK::ACharacter*>(pViewTarget);
-        if (pCharacter == nullptr)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            continue;
-        }
+	SDK::APlayerController* pPlayerController = SDK::UGameplayStatics::GetPlayerController(pWorld, 0);
+	if (pPlayerController == nullptr)
+	{
+		return;
+	}
 
-        SDK::UCharacterMovementComponent* pMovement = pCharacter->CharacterMovement;
-        if (pMovement == nullptr)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            continue;
-        }
+	SDK::AActor* pViewTarget = pPlayerController->GetViewTarget();
+	if (pViewTarget == nullptr)
+	{
+		return;
+	}
 
-        const float fWalkSpeed = vars::fWalkSpeed;
-        const float fCrouchWalkSpeed = vars::fCrouchWalkSpeed;
-        const float fRunSpeed = vars::fRunSpeed;
+	SDK::ACharacter* pCharacter = static_cast<SDK::ACharacter*>(pViewTarget);
+	if (pCharacter == nullptr)
+	{
+		return;
+	}
 
-        // Directly write to movement component fields (like FOV does with camera fields)
-        pMovement->MaxWalkSpeed = fRunSpeed;
-        pMovement->MaxWalkSpeedCrouched = fCrouchWalkSpeed;
+	SDK::UCharacterMovementComponent* pMovement = pCharacter->CharacterMovement;
+	if (pMovement == nullptr)
+	{
+		return;
+	}
 
-        // Also set the player character specific speed fields
-        SDK::APlayerCharacter* pPlayerCharacter = static_cast<SDK::APlayerCharacter*>(pViewTarget);
-        pPlayerCharacter->RunSpeed = fWalkSpeed;
-        pPlayerCharacter->MaxRunSpeedPercent = 1.0f;
-        pPlayerCharacter->CurrentRunSpeedPercent = 1.0f;
-        pPlayerCharacter->WalkSpeedMultiplier = 1.0f;
+	const float fWalkSpeed = vars::fWalkSpeed;
+	const float fCrouchWalkSpeed = vars::fCrouchWalkSpeed;
+	const float fRunSpeed = vars::fRunSpeed;
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
-    }
+	pMovement->MaxWalkSpeed = fRunSpeed;
+	pMovement->MaxWalkSpeedCrouched = fCrouchWalkSpeed;
+
+	SDK::APlayerCharacter* pPlayerCharacter = static_cast<SDK::APlayerCharacter*>(pViewTarget);
+	pPlayerCharacter->RunSpeed = fWalkSpeed;
+	pPlayerCharacter->MaxRunSpeedPercent = 1.0f;
+	pPlayerCharacter->CurrentRunSpeedPercent = 1.0f;
+	pPlayerCharacter->WalkSpeedMultiplier = 1.0f;
 }
 
 void walk_speed::Start()
 {
-    std::thread(RunWalkSpeedWorker).detach();
+	if (threadWorker.joinable())
+	{
+		return;
+	}
+	threadWorker = std::thread(RunWorker);
+}
+
+void walk_speed::Stop()
+{
+	if (threadWorker.joinable())
+	{
+		threadWorker.join();
+	}
 }

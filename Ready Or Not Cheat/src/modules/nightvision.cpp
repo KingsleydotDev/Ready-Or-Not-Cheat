@@ -1,4 +1,5 @@
 #include "nightvision.hpp"
+#include "moduleruntime.hpp"
 #include "../vars.h"
 #include "../SDK/Basic.hpp"
 #include "../SDK/CoreUObject_classes.hpp"
@@ -6,52 +7,79 @@
 #include "../SDK/Engine_classes.hpp"
 #include "../SDK/Engine_structs.hpp"
 #include "../SDK/ReadyOrNot_classes.hpp"
-#include <Windows.h>
-#include <thread>
 #include <chrono>
+#include <thread>
 
-void RunNightVisionWorker()
+namespace
 {
-	while (!(GetAsyncKeyState(VK_END) & 1))
+	std::thread threadWorker;
+
+	void RunWorker()
 	{
-		SDK::UWorld* pWorld = SDK::UWorld::GetWorld();
-		if (pWorld == nullptr)
+		while (moduleruntime::WorkersActive())
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			continue;
+			nightvision::Apply();
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		}
+	}
+}
 
-		SDK::APlayerController* pPlayerController = SDK::UGameplayStatics::GetPlayerController(pWorld, 0);
-		if (pPlayerController == nullptr)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			continue;
-		}
+void nightvision::Apply()
+{
+	if (!vars::bEnableNightVision && !vars::bNightVisionState)
+	{
+		return;
+	}
 
-		SDK::AActor* pViewTarget = pPlayerController->GetViewTarget();
-		if (pViewTarget == nullptr)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			continue;
-		}
+	SDK::UWorld* pWorld = SDK::UWorld::GetWorld();
+	if (pWorld == nullptr)
+	{
+		return;
+	}
 
-		SDK::AReadyOrNotCharacter* pCharacter = static_cast<SDK::AReadyOrNotCharacter*>(pViewTarget);
-		if (vars::bEnableNightVision && !vars::bNightVisionState)
-		{
-			pCharacter->EnableNightVisionGoggles();
-			vars::bNightVisionState = true;
-		}
-		else if (!vars::bEnableNightVision && vars::bNightVisionState)
-		{
-			pCharacter->DisableNightVisionGoggles();
-			vars::bNightVisionState = false;
-		}
+	SDK::APlayerController* pPlayerController = SDK::UGameplayStatics::GetPlayerController(pWorld, 0);
+	if (pPlayerController == nullptr)
+	{
+		return;
+	}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	SDK::AActor* pViewTarget = pPlayerController->GetViewTarget();
+	if (pViewTarget == nullptr)
+	{
+		return;
+	}
+
+	SDK::AReadyOrNotCharacter* pCharacter = static_cast<SDK::AReadyOrNotCharacter*>(pViewTarget);
+	if (pCharacter == nullptr)
+	{
+		return;
+	}
+
+	if (vars::bEnableNightVision && !vars::bNightVisionState)
+	{
+		pCharacter->EnableNightVisionGoggles();
+		vars::bNightVisionState = true;
+	}
+	else if (!vars::bEnableNightVision && vars::bNightVisionState)
+	{
+		pCharacter->DisableNightVisionGoggles();
+		vars::bNightVisionState = false;
 	}
 }
 
 void nightvision::Start()
 {
-	std::thread(RunNightVisionWorker).detach();
+	if (threadWorker.joinable())
+	{
+		return;
+	}
+	threadWorker = std::thread(RunWorker);
+}
+
+void nightvision::Stop()
+{
+	if (threadWorker.joinable())
+	{
+		threadWorker.join();
+	}
 }
