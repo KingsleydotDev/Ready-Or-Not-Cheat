@@ -16,7 +16,7 @@ namespace gui {
 }
 
 // menu size
-#define WIDTH 790
+#define WIDTH 920
 #define HEIGHT 578
 
 namespace gui

@@ -10,4 +10,5 @@ namespace vars
 	inline float fWalkSpeed = 200.0f;
 	inline float fCrouchWalkSpeed = 100.0f;
 	inline float fRunSpeed = 400.0f;
+	inline bool bEnableWatermark = true;
 }
