@@ -195,6 +195,10 @@ void gui::Render() noexcept
 				ImGui::SliderFloat("Scale", &vars::fAIScale, 0.5f, 5.0f, "%.1f");
 				ImGui::EndDisabled();
 				ImGui::Separator();
+				ImGui::SliderInt("Civ Spawn Count", &vars::iCivSpawnCount, 1, 50);
+				if (ImGui::Button("Spawn Civilians"))
+					vars::bSpawnCivs = true;
+				ImGui::Separator();
 				ImGui::Checkbox("Watermark", &vars::bEnableWatermark);
 				ImGui::EndTabItem();
 			}

@@ -14,6 +14,7 @@
 #include "modules/forcestart.hpp"
 #include "modules/instastart.hpp"
 #include "modules/aiscale.hpp"
+#include "modules/spawncivs.hpp"
 
 void Setup(const HMODULE instance)
 {
@@ -35,6 +36,7 @@ void Setup(const HMODULE instance)
         forcestart::Start();
         instastart::Start();
         aiscale::Start();
+        spawncivs::Start();
     }
     catch (const std::exception& error)
     {
@@ -61,6 +63,7 @@ UNLOAD:
     forcestart::Stop();
     instastart::Stop();
     aiscale::Stop();
+    spawncivs::Stop();
     if (bHooksReady)
         hooks::BeginUnloadWait();
     hooks::Destroy(bHooksReady, hooks::MinHookTornDownAfterPresent());

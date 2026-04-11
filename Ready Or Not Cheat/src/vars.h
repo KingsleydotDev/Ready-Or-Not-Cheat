@@ -15,5 +15,7 @@ namespace vars
 	inline bool bEnableInstaStart = false;
 	inline bool bEnableAIScale = false;
 	inline float fAIScale = 1.0f;
+	inline bool bSpawnCivs = false;
+	inline int iCivSpawnCount = 30;
 	inline bool bEnableWatermark = true;
 }
