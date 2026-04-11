@@ -23,7 +23,7 @@ namespace
 	float RandomFloat(float fMin, float fMax)
 	{
 		float fRand = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
-		return fMin + fRand * (fMax - fMin);
+		return fMin + fRand * (fMax - fMin); // test
 	}
 
 	void SpawnOneCivilian(SDK::UWorld* pWorld, SDK::UClass* pCivClass, const SDK::FVector& spawnLocation)
