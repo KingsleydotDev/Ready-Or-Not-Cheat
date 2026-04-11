@@ -190,6 +190,11 @@ void gui::Render() noexcept
 				if (ImGui::Button("Insta Start"))
 					vars::bEnableInstaStart = true;
 				ImGui::Separator();
+				ImGui::Checkbox("AI Scale", &vars::bEnableAIScale);
+				ImGui::BeginDisabled(!vars::bEnableAIScale);
+				ImGui::SliderFloat("Scale", &vars::fAIScale, 0.5f, 5.0f, "%.1f");
+				ImGui::EndDisabled();
+				ImGui::Separator();
 				ImGui::Checkbox("Watermark", &vars::bEnableWatermark);
 				ImGui::EndTabItem();
 			}

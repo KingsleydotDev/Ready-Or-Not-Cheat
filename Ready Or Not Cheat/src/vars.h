@@ -13,5 +13,7 @@ namespace vars
 	inline bool bEnableGodMode = false;
 	inline bool bEnableForceStart = false;
 	inline bool bEnableInstaStart = false;
+	inline bool bEnableAIScale = false;
+	inline float fAIScale = 1.0f;
 	inline bool bEnableWatermark = true;
 }

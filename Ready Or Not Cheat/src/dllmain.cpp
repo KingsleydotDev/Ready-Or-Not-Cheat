@@ -13,6 +13,7 @@
 #include "modules/godmode.hpp"
 #include "modules/forcestart.hpp"
 #include "modules/instastart.hpp"
+#include "modules/aiscale.hpp"
 
 void Setup(const HMODULE instance)
 {
@@ -33,6 +34,7 @@ void Setup(const HMODULE instance)
         godmode::Start();
         forcestart::Start();
         instastart::Start();
+        aiscale::Start();
     }
     catch (const std::exception& error)
     {
@@ -58,6 +60,7 @@ UNLOAD:
     godmode::Stop();
     forcestart::Stop();
     instastart::Stop();
+    aiscale::Stop();
     if (bHooksReady)
         hooks::BeginUnloadWait();
     hooks::Destroy(bHooksReady, hooks::MinHookTornDownAfterPresent());
