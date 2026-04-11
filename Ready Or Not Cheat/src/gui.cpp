@@ -184,6 +184,12 @@ void gui::Render() noexcept
 			if (ImGui::BeginTabItem("Misc"))
 			{
 			    ImGui::Checkbox("God Mode", &vars::bEnableGodMode);
+				ImGui::Separator();
+				if (ImGui::Button("Force Start (Ready All)"))
+					vars::bEnableForceStart = true;
+				if (ImGui::Button("Insta Start"))
+					vars::bEnableInstaStart = true;
+				ImGui::Separator();
 				ImGui::Checkbox("Watermark", &vars::bEnableWatermark);
 				ImGui::EndTabItem();
 			}

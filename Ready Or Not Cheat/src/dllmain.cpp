@@ -11,6 +11,8 @@
 #include "modules/nightvision.hpp"
 #include "modules/walk_speed.hpp"
 #include "modules/godmode.hpp"
+#include "modules/forcestart.hpp"
+#include "modules/instastart.hpp"
 
 void Setup(const HMODULE instance)
 {
@@ -29,6 +31,8 @@ void Setup(const HMODULE instance)
         walk_speed::Start();
         nightvision::Start();
         godmode::Start();
+        forcestart::Start();
+        instastart::Start();
     }
     catch (const std::exception& error)
     {
@@ -52,6 +56,8 @@ UNLOAD:
     walk_speed::Stop();
     nightvision::Stop();
     godmode::Stop();
+    forcestart::Stop();
+    instastart::Stop();
     if (bHooksReady)
         hooks::BeginUnloadWait();
     hooks::Destroy(bHooksReady, hooks::MinHookTornDownAfterPresent());
