@@ -183,6 +183,7 @@ void gui::Render() noexcept
 
 			if (ImGui::BeginTabItem("Misc"))
 			{
+			    ImGui::Checkbox("God Mode", &vars::bEnableGodMode);
 				ImGui::Checkbox("Watermark", &vars::bEnableWatermark);
 				ImGui::EndTabItem();
 			}

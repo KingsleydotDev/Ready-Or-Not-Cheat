@@ -10,6 +10,7 @@
 #include "modules/moduleruntime.hpp"
 #include "modules/nightvision.hpp"
 #include "modules/walk_speed.hpp"
+#include "modules/godmode.hpp"
 
 void Setup(const HMODULE instance)
 {
@@ -27,6 +28,7 @@ void Setup(const HMODULE instance)
         fov::Start();
         walk_speed::Start();
         nightvision::Start();
+        godmode::Start();
     }
     catch (const std::exception& error)
     {
@@ -49,6 +51,7 @@ UNLOAD:
     fov::Stop();
     walk_speed::Stop();
     nightvision::Stop();
+    godmode::Stop();
     if (bHooksReady)
         hooks::BeginUnloadWait();
     hooks::Destroy(bHooksReady, hooks::MinHookTornDownAfterPresent());
