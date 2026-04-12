@@ -162,6 +162,7 @@ void gui::Render() noexcept
 				ImGui::EndDisabled();
 
 				ImGui::SeparatorText("Camera");
+				ImGui::Checkbox("Fullbright", &vars::bPerfViewmodeUnlit);
 				ImGui::Checkbox("Enable FOV", &vars::bEnableFOV);
 				ImGui::BeginDisabled(!vars::bEnableFOV);
 				ImGui::SliderFloat("Field of view", &vars::fFieldOfview, 60.0f, 140.0f, "%.1f");
@@ -178,6 +179,47 @@ void gui::Render() noexcept
 				ImGui::SliderFloat("Crouch Walk Speed", &vars::fCrouchWalkSpeed, 50.0f, 10000.0f, "%.0f");
 				ImGui::SliderFloat("Run Speed", &vars::fRunSpeed, 50.0f, 20000.0f, "%.0f");
 				ImGui::EndDisabled();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Performance"))
+			{
+				ImGui::TextUnformatted("Each toggle runs a console command when a match is loaded. Turning off sends a restore command (defaults are typical UE values, not your original menu settings).");
+				ImGui::SeparatorText("Lighting and shadows");
+				ImGui::Checkbox("Fullbright (unlit viewmode)", &vars::bPerfViewmodeUnlit);
+				ImGui::Checkbox("Shadow quality minimum", &vars::bPerfShadowQualityLow);
+				ImGui::Checkbox("Volumetric fog off", &vars::bPerfVolFogOff);
+				ImGui::Checkbox("Distance field shadowing off", &vars::bPerfDistanceFieldShadowOff);
+				ImGui::Checkbox("Ray tracing off", &vars::bPerfRayTracingOff);
+				ImGui::Checkbox("Lumen reflections off", &vars::bPerfLumenReflectionsOff);
+				ImGui::Checkbox("Lumen diffuse indirect off", &vars::bPerfLumenDiffuseOff);
+				ImGui::Checkbox("Light shafts off", &vars::bPerfLightShaftsOff);
+				ImGui::Checkbox("Light shaft quality minimum", &vars::bPerfLightShaftQualityLow);
+				ImGui::SeparatorText("Post process");
+				ImGui::Checkbox("Post process AA minimum", &vars::bPerfPostProcessAaLow);
+				ImGui::Checkbox("Motion blur off", &vars::bPerfMotionBlurOff);
+				ImGui::Checkbox("Depth of field off", &vars::bPerfDofOff);
+				ImGui::Checkbox("Bloom off", &vars::bPerfBloomOff);
+				ImGui::Checkbox("Lens flare off", &vars::bPerfLensFlareOff);
+				ImGui::Checkbox("Film grain off", &vars::bPerfFilmGrainOff);
+				ImGui::Checkbox("Scene color fringe off", &vars::bPerfSceneColorFringeOff);
+				ImGui::Checkbox("Eye adaptation off", &vars::bPerfEyeAdaptationOff);
+				ImGui::SeparatorText("World detail");
+				ImGui::Checkbox("View distance scale aggressive", &vars::bPerfViewDistanceAggressive);
+				ImGui::Checkbox("Skeletal mesh LOD bias high", &vars::bPerfSkeletalMeshLodBias);
+				ImGui::Checkbox("Static mesh LOD distance scale high", &vars::bPerfStaticMeshLodScale);
+				ImGui::Checkbox("Max anisotropy minimum", &vars::bPerfMaxAnisoOff);
+				ImGui::Checkbox("Material quality low", &vars::bPerfMaterialQualityLow);
+				ImGui::Checkbox("Foliage density off", &vars::bPerfFoliageDensityOff);
+				ImGui::SeparatorText("Decals and particles");
+				ImGui::Checkbox("Decal force delete", &vars::bPerfDecalForceDelete);
+				ImGui::Checkbox("CPU particles per emitter minimum", &vars::bPerfCpuParticlesOff);
+				ImGui::Checkbox("GPU particles spawned per frame minimum", &vars::bPerfGpuParticlesOff);
+				ImGui::Checkbox("Refraction quality off", &vars::bPerfRefractionOff);
+				ImGui::SeparatorText("Debug overlay");
+				ImGui::Checkbox("Stat fps", &vars::bPerfStatFps);
+				ImGui::Checkbox("Stat unit", &vars::bPerfStatUnit);
+				ImGui::TextUnformatted("Changing stat options clears overlays then reapplies; stat none is used when both are off.");
 				ImGui::EndTabItem();
 			}
 

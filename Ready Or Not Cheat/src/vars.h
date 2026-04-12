@@ -18,4 +18,34 @@ namespace vars
 	inline bool bSpawnCivs = false;
 	inline int iCivSpawnCount = 30;
 	inline bool bEnableWatermark = true;
+
+	inline bool bPerfViewmodeUnlit = false;
+	inline bool bPerfShadowQualityLow = false;
+	inline bool bPerfVolFogOff = false;
+	inline bool bPerfPostProcessAaLow = false;
+	inline bool bPerfDecalForceDelete = false;
+	inline bool bPerfCpuParticlesOff = false;
+	inline bool bPerfDistanceFieldShadowOff = false;
+	inline bool bPerfRayTracingOff = false;
+	inline bool bPerfLumenReflectionsOff = false;
+	inline bool bPerfLumenDiffuseOff = false;
+	inline bool bPerfLightShaftsOff = false;
+	inline bool bPerfLightShaftQualityLow = false;
+	inline bool bPerfMotionBlurOff = false;
+	inline bool bPerfDofOff = false;
+	inline bool bPerfBloomOff = false;
+	inline bool bPerfLensFlareOff = false;
+	inline bool bPerfFilmGrainOff = false;
+	inline bool bPerfSceneColorFringeOff = false;
+	inline bool bPerfEyeAdaptationOff = false;
+	inline bool bPerfViewDistanceAggressive = false;
+	inline bool bPerfSkeletalMeshLodBias = false;
+	inline bool bPerfStaticMeshLodScale = false;
+	inline bool bPerfMaxAnisoOff = false;
+	inline bool bPerfMaterialQualityLow = false;
+	inline bool bPerfFoliageDensityOff = false;
+	inline bool bPerfGpuParticlesOff = false;
+	inline bool bPerfRefractionOff = false;
+	inline bool bPerfStatFps = false;
+	inline bool bPerfStatUnit = false;
 }
